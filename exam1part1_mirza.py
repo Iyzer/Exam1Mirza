@@ -15,6 +15,9 @@ headers = ["symboling", "normalized-losses", "make", "fuel-type", "aspiration", 
 # Load the dataset directly from the URL with custom headers
 df = pd.read_csv(file_url, names=headers, header=0)  # Set header=0 to skip the first row in the file
 
+# Handle missing values by filling numeric columns with the mean
+df.fillna(df.select_dtypes(include=['float64', 'int64']).mean(), inplace=True)
+
 # Display the first few rows of the dataset
 st.write("### Dataset Overview")
 st.write(df.head())
@@ -25,8 +28,13 @@ st.write(df.describe())
 
 # Visualize a correlation heatmap
 st.write("### Correlation Heatmap")
+# Select only numeric columns for the correlation matrix
+numeric_columns = df.select_dtypes(include=['float64', 'int64']).columns
+corr = df[numeric_columns].corr()
+
+# Plot correlation heatmap
 plt.figure(figsize=(12, 8))
-sns.heatmap(df.corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
 st.pyplot()
 
 # Visualize distribution of 'horsepower'
@@ -40,5 +48,3 @@ st.write("### Engine Size vs Price")
 plt.figure(figsize=(8, 6))
 sns.scatterplot(x='engine-size', y='price', data=df)
 st.pyplot()
-
-
