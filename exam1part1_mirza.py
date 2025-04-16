@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Define the URL to the CSV file
 file_url = "https://raw.githubusercontent.com/klamsal/Fall2024Exam/refs/heads/main/auto.csv"
@@ -14,15 +16,29 @@ headers = ["symboling", "normalized-losses", "make", "fuel-type", "aspiration", 
 df = pd.read_csv(file_url, names=headers, header=0)  # Set header=0 to skip the first row in the file
 
 # Display the first few rows of the dataset
-st.write("Here is the dataset:")
+st.write("### Dataset Overview")
 st.write(df.head())
 
-# Now you can proceed with data cleaning, transformation, etc.
-# For example, handling missing values:
-df.fillna(df.mean(), inplace=True)
-st.write("Data after filling missing values:")
-st.write(df.head())
+# Basic statistical summary
+st.write("### Statistical Summary")
+st.write(df.describe())
 
+# Visualize a correlation heatmap
+st.write("### Correlation Heatmap")
+plt.figure(figsize=(12, 8))
+sns.heatmap(df.corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+st.pyplot()
 
+# Visualize distribution of 'horsepower'
+st.write("### Distribution of Horsepower")
+plt.figure(figsize=(8, 6))
+sns.histplot(df['horsepower'].dropna(), kde=True, color='blue')
+st.pyplot()
+
+# Visualize the relationship between 'engine-size' and 'price'
+st.write("### Engine Size vs Price")
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x='engine-size', y='price', data=df)
+st.pyplot()
 
 
