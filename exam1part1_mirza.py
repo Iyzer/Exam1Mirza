@@ -591,3 +591,8 @@ df.to_csv('clean_df.csv')
 print("Rows:", df.shape[0])
 print("Columns:", df.shape[1])
 
+
+git add exam1part1_mirza.py
+git commit -m "Added exam1part1_mirza.py"
+git push origin main
+
